@@ -78,6 +78,10 @@ body {
     content: "";
 }
 
+.graphique{
+  margin: 0px 15px 0px 15px;
+}
+
 .rouge{
     color:red;
 }
