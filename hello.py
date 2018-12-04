@@ -44,10 +44,15 @@ port = int(os.getenv('PORT', 8000))
 def root():
     return app.send_static_file('index.html')
 
-# /* Endpoint to greet and add a new visitor to database.
-# * Send a POST request to localhost:8000/api/visitors with body
+# /* Endpoint to get all temperature in the database.
+# * Send a GET request to localhost:8000/api/temperature
+# * Data recover:
 # * {
-# *     "name": "Bob"
+# *     size: 0,
+# *     temperatures: [
+# *         { timestamp: xxx, temperature: xxx, humidity: xxx, dew_point: xxx, altitude: xxx },
+# *         ...
+#       ]
 # * }
 # */
 @app.route('/api/temperature', methods=['GET'])
@@ -58,10 +63,13 @@ def get_visitor():
             "temperatures": []
         }
         for document in db:
-            if ("timestamp" in document and "data" in document):
+            if ("timestamp" in document and "data" in document and "Temperature" in document["data"]):
                 full_datas["temperatures"].append({
                     "timestamp": document["timestamp"],
-                    "temperature": document["data"]["Temperature"]
+                    "temperature": document["data"]["temperature"],
+                    "humidity": document["data"]["humidity"],
+                    "dew_point": document["data"]["dew_point"],
+                    "altitude": document["data"]["altitude"]
                 })
         full_datas["size"] = len(full_datas["temperatures"])
         return jsonify(full_datas)
