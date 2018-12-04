@@ -77,3 +77,10 @@ body {
     border: solid 1px black;
     content: "";
 }
+
+.rouge{
+    color:red;
+}
+.blue{
+    color:blue;
+}
