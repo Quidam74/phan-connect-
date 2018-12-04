@@ -54,7 +54,6 @@ function listData(data){
     circle.setAttribute("cx",x);
     circle.setAttribute("cy",84-values[i].temperature)
     circle.classList.add('circle');
-    console.log(i);
     container.appendChild(circle);
     x=x+25;
   }
