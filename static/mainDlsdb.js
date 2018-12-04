@@ -45,14 +45,14 @@ function listData(data){
   var svgns = "http://www.w3.org/2000/svg"
   var container = document.querySelector('.graphique > svg > g');
   container.innerHTML = ''
-  const values = data.values.slice(0, 42)
+  const values = data.values.slice(0, 40)
   var x = 10;
 
   values.reverse().map(value => {
     const circle = document.createElementNS(svgns,'circle');
     circle.setAttribute("r", 5);
     circle.setAttribute("cx", x);
-    circle.setAttribute("cy", (84*3.8 - value.temperature * 8))
+    circle.setAttribute("cy", (100*3.8 - value.temperature * 8))
     circle.classList.add('circle');
     container.prepend(circle);
     x += 25;
