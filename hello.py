@@ -3,12 +3,14 @@ from flask import Flask, render_template, request, jsonify
 import atexit
 import os
 import json
+from cloudant.result import Result, ResultByKey
 
 app = Flask(__name__, static_url_path='')
 
-db_name = 'mydb'
+db_name = 'iotp_514y4j_default_2018-12'
 client = None
 db = None
+url = None
 
 if 'VCAP_SERVICES' in os.environ:
     vcap = json.loads(os.getenv('VCAP_SERVICES'))
@@ -48,10 +50,21 @@ def root():
 # *     "name": "Bob"
 # * }
 # */
-@app.route('/api/visitors', methods=['GET'])
+@app.route('/api/temperature', methods=['GET'])
 def get_visitor():
     if client:
-        return jsonify(list(map(lambda doc: doc['name'], db)))
+        full_datas = {
+            "size": 0,
+            "temperatures": []
+        }
+        for document in db:
+            if ("timestamp" in document and "data" in document):
+                full_datas["temperatures"].append({
+                    "timestamp": document["timestamp"],
+                    "temperature": document["data"]["Temperature"]
+                })
+        full_datas["size"] = len(full_datas["temperatures"])
+        return jsonify(full_datas)
     else:
         print('No database')
         return jsonify([])
