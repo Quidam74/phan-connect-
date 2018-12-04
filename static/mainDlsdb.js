@@ -90,9 +90,12 @@ function lastData(data){
   let dewValue = document.querySelector('span.dew-value');
   let humValue = document.querySelector('span.hum-value');
 
+
+
     tempValue.innerHTML = Math.floor(data.temperature*10)/10+"°C";
     dewValue.innerHTML = Math.floor(data.dew_point*10)/10+"°C";
     humValue.innerHTML = Math.floor(data.humidity*10)/10+"%";
+
   //let divCurrentDate = document.querySelector('div.time-value');
   //var d = new Date(Date.parse(data.timestamp));
   //divCurrentDate.innerHTML = 'le : ' + d.getDate() + '/' + (d.getMonth()+1) + '/' + d.getFullYear() + ' à ' + d.getHours() + ':' + d.getMinutes();
