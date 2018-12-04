@@ -63,7 +63,7 @@ def get_visitor():
             "temperatures": []
         }
         for document in db:
-            if ("timestamp" in document and "data" in document and "Temperature" in document["data"]):
+            if ("timestamp" in document and "data" in document and "temperature" in document["data"]):
                 full_datas["temperatures"].append({
                     "timestamp": document["timestamp"],
                     "temperature": document["data"]["temperature"],
