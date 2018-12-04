@@ -3,12 +3,14 @@ from flask import Flask, render_template, request, jsonify
 import atexit
 import os
 import json
+from cloudant.result import Result, ResultByKey
 
 app = Flask(__name__, static_url_path='')
 
-db_name = 'mydb'
+db_name = 'iotp_514y4j_default_2018-12'
 client = None
 db = None
+url = None
 
 if 'VCAP_SERVICES' in os.environ:
     vcap = json.loads(os.getenv('VCAP_SERVICES'))
@@ -42,16 +44,35 @@ port = int(os.getenv('PORT', 8000))
 def root():
     return app.send_static_file('index.html')
 
-# /* Endpoint to greet and add a new visitor to database.
-# * Send a POST request to localhost:8000/api/visitors with body
+# /* Endpoint to get all temperature in the database.
+# * Send a GET request to localhost:8000/api/temperature
+# * Data recover:
 # * {
-# *     "name": "Bob"
+# *     size: 0,
+# *     temperatures: [
+# *         { timestamp: xxx, temperature: xxx, humidity: xxx, dew_point: xxx, altitude: xxx },
+# *         ...
+#       ]
 # * }
 # */
-@app.route('/api/visitors', methods=['GET'])
+@app.route('/api/temperature', methods=['GET'])
 def get_visitor():
     if client:
-        return jsonify(list(map(lambda doc: doc['name'], db)))
+        full_datas = {
+            "size": 0,
+            "temperatures": []
+        }
+        for document in db:
+            if ("timestamp" in document and "data" in document and "temperature" in document["data"]):
+                full_datas["temperatures"].append({
+                    "timestamp": document["timestamp"],
+                    "temperature": document["data"]["temperature"],
+                    "humidity": document["data"]["humidity"],
+                    "dew_point": document["data"]["dew_point"],
+                    "altitude": document["data"]["altitude"]
+                })
+        full_datas["size"] = len(full_datas["temperatures"])
+        return jsonify(full_datas)
     else:
         print('No database')
         return jsonify([])
