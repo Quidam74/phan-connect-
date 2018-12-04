@@ -42,21 +42,21 @@ function getLastData(){
 }
 
 function listData(data){
-  var values = data.values;
   var svgns = "http://www.w3.org/2000/svg"
   var container = document.querySelector('.graphique > svg > g');
-  var x = 0;
-  var lenValues = values.length+1;
-  var i = lenValues-42;
-  for (i; i <= lenValues; i++) {
-    let circle = document.createElementNS(svgns,'circle');
-    circle.setAttribute("r",5);
-    circle.setAttribute("cx",x);
-    circle.setAttribute("cy",84-values[i].temperature)
+  container.innerHTML = ''
+  const values = data.values.slice(0, 42)
+  var x = 10;
+
+  values.reverse().map(value => {
+    const circle = document.createElementNS(svgns,'circle');
+    circle.setAttribute("r", 5);
+    circle.setAttribute("cx", x);
+    circle.setAttribute("cy", (84*3.8 - value.temperature * 8))
     circle.classList.add('circle');
-    container.appendChild(circle);
-    x=x+25;
-  }
+    container.prepend(circle);
+    x += 25;
+  })
 }
 //recupère et stocke dans div dernière données
 function lastData(data){
