@@ -1,3 +1,9 @@
+$(document).ready(function () {
+    getListData();
+    setInterval(() => {
+        getLastData();
+        console.log("change")
+    }, 5000)
 
 $(document).ready(function(){
   // test();
@@ -90,5 +96,19 @@ function lastData(data){
   //let divCurrentDate = document.querySelector('div.time-value');
   //var d = new Date(Date.parse(data.timestamp));
   //divCurrentDate.innerHTML = 'le : ' + d.getDate() + '/' + (d.getMonth()+1) + '/' + d.getFullYear() + ' à ' + d.getHours() + ':' + d.getMinutes();
+    if (eval(data.temperature) >= 30) {
+        tempValue.classList.add("rouge");
+    } else if (eval(data.temperature) <= 15){
+        tempValue.classList.add("bleu");
+    } else {
+    tempValue.classList.remove("bleu");
+    tempValue.classList.remove("rouge");
+
+    }
+
+
+    //let divCurrentDate = document.querySelector('div.time-value');
+    //var d = new Date(Date.parse(data.timestamp));
+    //divCurrentDate.innerHTML = 'le : ' + d.getDate() + '/' + (d.getMonth()+1) + '/' + d.getFullYear() + ' à ' + d.getHours() + ':' + d.getMinutes();
 
 }

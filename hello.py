@@ -44,6 +44,8 @@ def value_is_valide (document):
     return ("timestamp" in document and "data" in document and 
            "temperature" in document["data"][0] and "humidity" in document["data"][0] and
            "dew_point" in document["data"][0] and "altitude" in document["data"][0])
+def getTimestamp (value):
+    return value["timestamp"]
 
 @app.route('/')
 def root():
@@ -70,6 +72,7 @@ def get_values():
             "nextPageToken": ""
         }
         
+        # Get url params
         numberOfRows =None
         if ("numberOfRows" in request.args):
             numberOfRows = request.args["numberOfRows"]
@@ -81,9 +84,6 @@ def get_values():
             pageToken = request.args["pageToken"]
 
         pageTokenFind = False
-
-        print(numberOfRows)
-        print(pageToken)
 
         for document in db:
             if (value_is_valide(document)):
@@ -100,6 +100,7 @@ def get_values():
                     pageTokenFind = True
 
         full_datas["size"] = len(full_datas["values"])
+        full_datas["values"].sort(key=getTimestamp, reverse=True)
         return jsonify(full_datas)
     else:
         print('No database')
@@ -113,16 +114,17 @@ def get_values():
 @app.route('/api/value/last', methods=['GET'])
 def get_last_value():
     if client:
+        value = {}
         for document in db:
-            if (value_is_valide(document)):
-                return jsonify({
+            if (value_is_valide(document) and ("timestamp" not in value or value["timestamp"] < document["timestamp"])):
+                value = {
                     "timestamp": document["timestamp"],
                     "temperature": document["data"][0]["temperature"],
                     "humidity": document["data"][0]["humidity"],
                     "dew_point": document["data"][0]["dew_point"],
                     "altitude": document["data"][0]["altitude"] 
-                })
-        return jsonify([])
+                }
+        return jsonify(value)
     else:
         print('No database')
         return jsonify([])
