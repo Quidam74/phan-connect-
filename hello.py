@@ -63,13 +63,13 @@ def get_visitor():
             "temperatures": []
         }
         for document in db:
-            if ("timestamp" in document and "data" in document and "temperature" in document["data"]):
+            if ("timestamp" in document and "data" in document and "temperature" in document["data"][0] and "humidity" in document["data"][0] and "dew_point" in document["data"][0] and "altitude" in document["data"][0]):
                 full_datas["temperatures"].append({
                     "timestamp": document["timestamp"],
-                    "temperature": document["data"]["temperature"],
-                    "humidity": document["data"]["humidity"],
-                    "dew_point": document["data"]["dew_point"],
-                    "altitude": document["data"]["altitude"]
+                    "temperature": document["data"][0]["temperature"],
+                    "humidity": document["data"][0]["humidity"],
+                    "dew_point": document["data"][0]["dew_point"],
+                    "altitude": document["data"][0]["altitude"]
                 })
         full_datas["size"] = len(full_datas["temperatures"])
         return jsonify(full_datas)
