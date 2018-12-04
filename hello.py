@@ -40,39 +40,89 @@ elif os.path.isfile('vcap-local.json'):
 # When running this app on the local machine, default the port to 8000
 port = int(os.getenv('PORT', 8000))
 
+def value_is_valide (document):
+    return ("timestamp" in document and "data" in document and 
+           "temperature" in document["data"][0] and "humidity" in document["data"][0] and
+           "dew_point" in document["data"][0] and "altitude" in document["data"][0])
+
 @app.route('/')
 def root():
     return app.send_static_file('index.html')
 
-# /* Endpoint to get all temperature in the database.
-# * Send a GET request to localhost:8000/api/temperature
-# * Data recover:
+# /* Endpoint to get all values in the database.
+# * Send a GET request to localhost:8000/api/value/list?numberOfRows=xxx&pageToken=xxx
+# * Return:
 # * {
 # *     size: 0,
-# *     temperatures: [
+# *     nextPageToken: xxx,
+# *     values: [
 # *         { timestamp: xxx, temperature: xxx, humidity: xxx, dew_point: xxx, altitude: xxx },
 # *         ...
 #       ]
 # * }
 # */
-@app.route('/api/temperature', methods=['GET'])
-def get_visitor():
+@app.route('/api/value/list', methods=['GET'])
+def get_values():
     if client:
         full_datas = {
             "size": 0,
-            "temperatures": []
+            "values": [],
+            "nextPageToken": ""
         }
+        
+        numberOfRows =None
+        if ("numberOfRows" in request.args):
+            numberOfRows = request.args["numberOfRows"]
+        else:
+            numberOfRows = 200
+
+        pageToken = None
+        if ("pageToken" in request.args):
+            pageToken = request.args["pageToken"]
+
+        pageTokenFind = False
+
+        print(numberOfRows)
+        print(pageToken)
+
         for document in db:
-            if ("timestamp" in document and "data" in document and "temperature" in document["data"][0] and "humidity" in document["data"][0] and "dew_point" in document["data"][0] and "altitude" in document["data"][0]):
-                full_datas["temperatures"].append({
+            if (value_is_valide(document)):
+                if (pageTokenFind and len(full_datas["values"]) < int(numberOfRows)):
+                    full_datas["nextPageToken"] = document["_id"]
+                    full_datas["values"].append({
+                        "timestamp": document["timestamp"],
+                        "temperature": document["data"][0]["temperature"],
+                        "humidity": document["data"][0]["humidity"],
+                        "dew_point": document["data"][0]["dew_point"],
+                        "altitude": document["data"][0]["altitude"]
+                    })
+                if (pageTokenFind == False and (pageToken == None or document["_id"] == pageToken)):
+                    pageTokenFind = True
+
+        full_datas["size"] = len(full_datas["values"])
+        return jsonify(full_datas)
+    else:
+        print('No database')
+        return jsonify([])
+
+# /* Endpoint to get the last value of captor
+# * Send a GET request to localhost:8000/api/value/last
+# * return:
+# * { timestamp: xxx, temperature: xxx, humidity: xxx, dew_point: xxx, altitude: xxx }
+# */
+@app.route('/api/value/last', methods=['GET'])
+def get_last_value():
+    if client:
+        for document in db:
+            if (value_is_valide(document)):
+                return jsonify({
                     "timestamp": document["timestamp"],
                     "temperature": document["data"][0]["temperature"],
                     "humidity": document["data"][0]["humidity"],
                     "dew_point": document["data"][0]["dew_point"],
-                    "altitude": document["data"][0]["altitude"]
+                    "altitude": document["data"][0]["altitude"] 
                 })
-        full_datas["size"] = len(full_datas["temperatures"])
-        return jsonify(full_datas)
+        return jsonify([])
     else:
         print('No database')
         return jsonify([])
