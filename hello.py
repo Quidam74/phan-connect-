@@ -72,6 +72,7 @@ def get_values():
             "nextPageToken": ""
         }
         
+        # Get url params
         numberOfRows =None
         if ("numberOfRows" in request.args):
             numberOfRows = request.args["numberOfRows"]
@@ -83,9 +84,6 @@ def get_values():
             pageToken = request.args["pageToken"]
 
         pageTokenFind = False
-
-        print(numberOfRows)
-        print(pageToken)
 
         for document in db:
             if (value_is_valide(document)):
