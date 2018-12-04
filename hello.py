@@ -50,10 +50,11 @@ def root():
     return app.send_static_file('index.html')
 
 # /* Endpoint to get all values in the database.
-# * Send a GET request to localhost:8000/api/value/list
+# * Send a GET request to localhost:8000/api/value/list?numberOfRows=xxx&pageToken=xxx
 # * Return:
 # * {
 # *     size: 0,
+# *     nextPageToken: xxx,
 # *     values: [
 # *         { timestamp: xxx, temperature: xxx, humidity: xxx, dew_point: xxx, altitude: xxx },
 # *         ...
