@@ -1,8 +1,10 @@
+$(document).ready(function () {
+    getListData();
+    setInterval(() => {
+        getLastData();
+        console.log("change")
+    }, 5000)
 
-$(document).ready(function(){
-  test();
-  getListData();
-  getLastData();
 });
 // function getLastData(){
 //   $.get( "https://dans-la-salle-de-bains.eu-gb.mybluemix.net/api/value/last", function(data) {
@@ -73,6 +75,7 @@ function listData(data){
     i++;
   })
 }
+
 //recupère et stocke dans div dernière données
 function lastData(data){
   let tempValue = document.querySelector('span.temp-value');
@@ -87,5 +90,19 @@ function lastData(data){
   //let divCurrentDate = document.querySelector('div.time-value');
   //var d = new Date(Date.parse(data.timestamp));
   //divCurrentDate.innerHTML = 'le : ' + d.getDate() + '/' + (d.getMonth()+1) + '/' + d.getFullYear() + ' à ' + d.getHours() + ':' + d.getMinutes();
+    if (eval(data.temperature) >= 30) {
+        tempValue.classList.add("rouge");
+    } else if (eval(data.temperature) <= 15){
+        tempValue.classList.add("bleu");
+    } else {
+    tempValue.classList.remove("bleu");
+    tempValue.classList.remove("rouge");
+
+    }
+
+
+    //let divCurrentDate = document.querySelector('div.time-value');
+    //var d = new Date(Date.parse(data.timestamp));
+    //divCurrentDate.innerHTML = 'le : ' + d.getDate() + '/' + (d.getMonth()+1) + '/' + d.getFullYear() + ' à ' + d.getHours() + ':' + d.getMinutes();
 
 }
