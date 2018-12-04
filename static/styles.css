@@ -1,30 +1,79 @@
+@import url('https://fonts.googleapis.com/css?family=Lato');
+
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
+
+p {
+    font-family: 'Lato', sans-serif;
+}
+
+h1 {
+    font-family: 'Lato', sans-serif;
+    font-size: 40px;
+    margin-top: 30px;
+    text-align: center;
+}
+
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
 }
+
 .footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 60px;
-  line-height: 60px;
-  text-align: center;
-  background-color: #f5f7fa;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+    background-color: #f5f7fa;
 }
-.helloInput {
-  width: 300px;
+
+.svg > * {
+    width: 30%;
+    height: auto;
 }
-.circle {
-  border: solid 1px black;
-  border-radius: 50%;
-  width: 100%;
-  height: auto;
-  text-align: center;
+
+.currentData {
+    margin-top: 30px;
+    display: flex;
+    width: 100%;
+    height: 200px;
 }
-.svg > *{
-  width: 30%;
-  height: auto;
+
+.currentData-subdiv {
+
+    width: 33%;
+}
+
+.currentData-subdiv p {
+    font-size: 30px;
+    text-align: center;
+}
+
+.result {
+
+    display: flex;
+
+}
+
+.currentData-subdiv .result span {
+
+    font-size: 26px;
+    text-align: center;
+    margin: auto;
+    margin-top: 40px;
+    line-height: 28px;
+
+}
+
+.currentData-subdiv .result span:after {
+    position: absolute;
+    transform: translate(calc(-77px/3*2),calc(-75px/3));
+    height: 75px;
+    width: 75px;
+    border-radius: 50%;
+    border: solid 1px black;
+    content: "";
 }
