@@ -17,3 +17,14 @@ body {
 .helloInput {
   width: 300px;
 }
+.circle {
+  border: solid 1px black;
+  border-radius: 50%;
+  width: 100%;
+  height: auto;
+  text-align: center;
+}
+.svg > *{
+  width: 30%;
+  height: auto;
+}
